@@ -39,7 +39,7 @@ export const config = {
     spawnSync(
       "pnpm",
       ["tauri", "build", "--debug", "--features", "automation"].concat(
-        process.platform === "drawin" ? ["-b", "app"] : ["--no-bundle"]
+        process.platform === "darwin" ? ["-b", "app"] : ["--no-bundle"]
       ),
       {
         cwd: path.resolve(__dirname, ".."),
