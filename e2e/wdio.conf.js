@@ -3,7 +3,6 @@ import { spawn, spawnSync } from "child_process";
 import { CrabNebulaCloudReporter } from "@crabnebula/webdriverio-cloud-reporter";
 import { waitTauriDriverReady } from "@crabnebula/tauri-driver";
 import { fileURLToPath } from "url";
-import os from "os";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
 
@@ -80,11 +79,10 @@ export const config = {
   // ensure we are running `tauri-driver` before the session starts so that we can proxy the webdriver requests
   beforeSession: async () => {
     // tauriDriver = spawn(tauriDriverPath, [], {
-    tauriDriver = spawn(
-      path.resolve(os.homedir(), ".cargo", "bin", "tauri-driver"),
-      [],
-      { stdio: [null, process.stdout, process.stderr] }
-    );
+    tauriDriver = spawn("pnpm", ["tauri-driver"], {
+      stdio: [null, process.stdout, process.stderr],
+      shell: true,
+    });
     tauriDriver.on("error", (error) => {
       console.error("tauri-driver error:", error);
       process.exit(1);
