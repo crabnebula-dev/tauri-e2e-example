@@ -81,6 +81,7 @@ export const config = {
     // tauriDriver = spawn(tauriDriverPath, [], {
     tauriDriver = spawn("pnpm", ["tauri-driver"], {
       stdio: [null, process.stdout, process.stderr],
+      shell: true,
     });
     tauriDriver.on("error", (error) => {
       console.error("tauri-driver error:", error);
