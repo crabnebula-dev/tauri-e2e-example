@@ -20,10 +20,10 @@ jobs:
           node-version: "22"
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm ci
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm ci
         working-directory: e2e
 
       - name: Run integration tests
