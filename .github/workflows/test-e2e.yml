@@ -1,0 +1,31 @@
+
+name: E2E Tests
+
+on:
+  push:
+
+env:
+  CN_API_KEY: ${{ secrets.CN_API_KEY }}
+
+jobs:
+  test:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Install dependencies
+        run: pnpm install
+        working-directory: e2e
+
+      - name: Run integration tests
+        run: pnpm test
+        working-directory: e2e
