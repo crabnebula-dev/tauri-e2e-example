@@ -5,6 +5,7 @@ import { waitTauriDriverReady } from "@crabnebula/tauri-driver";
 import { fileURLToPath } from "url";
 
 const __dirname = fileURLToPath(new URL(".", import.meta.url));
+const isMac = process.platform === 'darwin';
 
 let tauriDriver;
 let exit = false;
@@ -17,6 +18,8 @@ export const config = {
   maxInstances: 1,
   capabilities: [
     {
+      browserName: 'tauri',
+      platformName: isMac ? 'macOS' : 'Windows',
       maxInstances: 1,
       "tauri:options": {
         application:
