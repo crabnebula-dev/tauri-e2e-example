@@ -27,5 +27,5 @@ jobs:
         working-directory: e2e
 
       - name: Run integration tests
-        run: pnpm test
+        run: npm run test
         working-directory: e2e
