@@ -24,8 +24,8 @@ export const config = {
       "tauri:options": {
         application:
           process.platform === "darwin"
-            ? "../src-tauri/target/debug/bundle/macos/WebDriver Example.app"
-            : "../src-tauri/target/debug/webdriver-example",
+            ? path.resolve(__dirname, "../src-tauri/target/debug/bundle/macos/WebDriver Example.app")
+            : path.resolve(__dirname, "../src-tauri/target/debug/webdriver-example"),
       },
     },
   ],
