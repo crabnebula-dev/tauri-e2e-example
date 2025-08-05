@@ -1,40 +1,65 @@
-
 name: E2E Tests
 
 on:
   push:
 
-env:
-  CN_API_KEY: ${{ secrets.CN_API_KEY }}
-
 jobs:
   test:
-    runs-on: macos-latest
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+      fail-fast: false
+
+    runs-on: ${{ matrix.os }}
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Node v22
         uses: actions/setup-node@v4
         with:
-          node-version: "22"
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-            version: 10
-      - name: Use Node.js 24
-        uses: actions/setup-node@v4
-        with:
-            node-version: 24
-            cache: 'pnpm'
+          node-version: 22
+          cache: "pnpm"
 
-      - name: Install dependencies
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: true
+
+      - name: install dependencies
         run: pnpm install
 
-      - name: Install e2e dependencies
-        run: pnpm install
+      - name: install Tauri dependencies (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: >
+          sudo apt-get update &&
+          sudo apt-get install -y
+          webkit2gtk-4.1
+          libayatana-appindicator3-dev
+          webkit2gtk-driver
+          xvfb
+
+      - name: install msdgedriver (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          cargo install --git https://github.com/chippers/msedgedriver-tool
+          & "$HOME/.cargo/bin/msedgedriver-tool.exe"
+          $PWD.Path >> $env:GITHUB_PATH
+
+      - name: run e2e tests (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          pnpm install
+          xvfb-run pnpm test
         working-directory: e2e
 
-      - name: Run e2e integration tests
-        run: pnpm  test
+      - name: run e2e tests
+        run: |
+          pnpm install
+          pnpm test
         working-directory: e2e
+        env:
+          CN_API_KEY: ${{ secrets.CN_API_KEY }}
