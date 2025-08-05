@@ -28,6 +28,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
         with:
           cache-on-failure: true
+          workspaces: src-tauri
 
       - name: install dependencies
         run: pnpm install
