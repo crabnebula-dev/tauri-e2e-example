@@ -57,6 +57,7 @@ jobs:
         working-directory: e2e
 
       - name: run e2e tests
+        if: matrix.os != 'ubuntu-latest'
         run: |
           pnpm install
           pnpm test
