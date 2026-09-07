@@ -61,7 +61,7 @@ jobs:
       - name: run e2e tests (Windows)
         if: matrix.os == 'windows-latest'
         run: |
-          winget install gerardog.gsudo
+          winget install gerardog.gsudo --accept-source-agreements --accept-package-agreements
           pnpm install
           sudo --integrity Medium pnpm test
         working-directory: e2e
