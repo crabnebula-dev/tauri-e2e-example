@@ -63,7 +63,7 @@ jobs:
         shell: pwsh
         run: |
           winget install gerardog.gsudo --accept-source-agreements --accept-package-agreements
-          icacls "$env:GITHUB_WORKSPACE" /setintegritylevel "(OI)(CI)M" /T
+          icacls "$env:GITHUB_WORKSPACE" /grant "(OI)(CI)F"
           pnpm install
           sudo --integrity Medium pnpm test
         working-directory: e2e
