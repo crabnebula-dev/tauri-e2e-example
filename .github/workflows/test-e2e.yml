@@ -58,8 +58,16 @@ jobs:
           xvfb-run pnpm test
         working-directory: e2e
 
-      - name: run e2e tests
-        if: matrix.os != 'ubuntu-latest'
+      - name: run e2e tests (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          winget install gerardog.gsudo
+          pnpm install
+          sudo --integrity Medium pnpm test
+        working-directory: e2e
+
+      - name: run e2e tests (macOS)
+        if: matrix.os == 'macos-latest'
         run: |
           pnpm install
           pnpm test
