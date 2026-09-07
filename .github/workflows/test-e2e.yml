@@ -2,6 +2,7 @@ name: E2E Tests
 
 on:
   push:
+  pull_request:
 
 jobs:
   test:
@@ -13,16 +14,16 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
-          version: 10
+          version: 12
 
-      - name: Node v22
-        uses: actions/setup-node@v4
+      - name: Node v24
+        uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 24
           cache: "pnpm"
 
       - uses: Swatinem/rust-cache@v2
@@ -57,8 +58,21 @@ jobs:
           xvfb-run pnpm test
         working-directory: e2e
 
-      - name: run e2e tests
-        if: matrix.os != 'ubuntu-latest'
+      # We're using gsudo to run the app de-elevated to work around https://github.com/MicrosoftEdge/WebView2Feedback/issues/5645,
+      # TL;DR: `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS` env var set from `msedgedriver.exe` no longer works if the app is elevated.
+      # See https://github.com/tauri-apps/wry/issues/1782
+      - name: run e2e tests (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
+        run: |
+          winget install gerardog.gsudo --accept-source-agreements --accept-package-agreements
+          icacls "$env:GITHUB_WORKSPACE" /grant "Everyone:(OI)(CI)F"
+          pnpm install
+          sudo --integrity Medium pnpm test
+        working-directory: e2e
+
+      - name: run e2e tests (macOS)
+        if: matrix.os == 'macos-latest'
         run: |
           pnpm install
           pnpm test
