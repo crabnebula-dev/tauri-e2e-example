@@ -2,6 +2,7 @@ name: E2E Tests
 
 on:
   push:
+  pull_request:
 
 jobs:
   test:
@@ -13,16 +14,16 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
-          version: 10
+          version: 12
 
-      - name: Node v22
-        uses: actions/setup-node@v4
+      - name: Node v24
+        uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 24
           cache: "pnpm"
 
       - uses: Swatinem/rust-cache@v2
