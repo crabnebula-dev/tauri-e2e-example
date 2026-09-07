@@ -58,6 +58,9 @@ jobs:
           xvfb-run pnpm test
         working-directory: e2e
 
+      # We're using gsudo to run the app de-elevated to work around https://github.com/MicrosoftEdge/WebView2Feedback/issues/5645,
+      # TL;DR: `WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS` env var set from `msedgedriver.exe` no longer works if the app is elevated.
+      # See https://github.com/tauri-apps/wry/issues/1782
       - name: run e2e tests (Windows)
         if: matrix.os == 'windows-latest'
         shell: pwsh
