@@ -3,5 +3,4 @@ allowBuilds:
   esbuild: true
   geckodriver: true
 overrides:
-  deepmerge-ts@<8.0.0: ^8.0.0
   serialize-javascript@>=5.0.0 <7.0.5: ^7.0.5
