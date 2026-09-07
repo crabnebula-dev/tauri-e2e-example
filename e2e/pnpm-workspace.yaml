@@ -4,3 +4,4 @@ allowBuilds:
   geckodriver: true
 overrides:
   serialize-javascript@>=5.0.0 <7.0.5: ^7.0.5
+minimumReleaseAge: 0
