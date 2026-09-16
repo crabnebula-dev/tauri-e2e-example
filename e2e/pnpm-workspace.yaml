@@ -2,5 +2,12 @@ allowBuilds:
   edgedriver: true
   esbuild: true
   geckodriver: true
+auditConfig:
+  ignoreGhsas:
+    # extract-zip symlink path traversal; no patched release exists (latest is
+    # still 2.0.1). Reached via @wdio/utils > @puppeteer/browsers, which only
+    # unpacks the browser drivers we never download (see allowBuilds above)
+    - GHSA-jmr9-qjv8-65gv
+    - GHSA-7pqw-9j4j-h8q3
 overrides:
   serialize-javascript@>=5.0.0 <7.0.5: ^7.0.5
