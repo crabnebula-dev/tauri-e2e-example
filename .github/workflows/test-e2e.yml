@@ -68,7 +68,7 @@ jobs:
         if: matrix.os == 'windows-latest'
         shell: pwsh
         run: |
-          winget install gerardog.gsudo --accept-source-agreements --accept-package-agreements
+          winget install gerardog.gsudo --accept-source-agreements --accept-package-agreements --source winget
           icacls "$env:GITHUB_WORKSPACE" /grant "Everyone:(OI)(CI)F"
           pnpm install
           sudo --integrity Medium pnpm test
